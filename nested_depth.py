@@ -2,49 +2,43 @@ def inputing():
     t = int(input())
     return t
 
-def get_paranthesis(i):
-    s = ''
-    if i == 0 :
-            return str(i)
-    s = ('({})'.format(i))
-    while i >= 2 :
-        s = '(' + s + ')'
-        i = i - 1
-    return s
+def get_num_list(string):
+    num_list = [int(a) for a in string]
+    return num_list
 
-'''def check_for_is_previous_one(i, s):
-    previous = s[-2: -3: -1]
-    if i == 1 :
-        sub = s[0: -1] + '1)'
-    return sub'''
+def mod(a, b):
+    d = a - b
+    if d >= 0 :
+        return d
+    else:
+        return -1 * d
 
-def check_for_is_previous(i, s):
-    sub = s
-    flag = True
-    previous = s[-(i+1): -(i+2): -1]
-    if (previous == str(i) and i > 0) :
-        sub = s[0: -i] + ('{}'.format(i)) + i*(')')
-        flag = False
-    elif (int(previous) < i and i > 0) :
-        sub = s[0: -i] + ('{}'.format(i)) + i*(')')
-        flag = False
-    return sub, flag
-    
-def pranthesis(istr):
-    string = ''
-    workable = [int(i) for i in istr]
-    length = len(workable)
-    string = get_paranthesis(workable[0])
-    for i in range(1, length) :
-        string, flag = check_for_is_previous(workable[i], string)
-        if flag :
-                ch = get_paranthesis(workable[i])
-                string = string + ch
+def greater(a, b, string):
+    string = string + mod(a,b)*'(' + str(b)
     return string
+
+def lesser(a, b, string):
+    string = string + mod(a,b) * ')' + str(b)
+    return string
+
+def process(num_list):
+    b = num_list[0]
+    string = (num_list[0]) * '(' + str(num_list[0])
+    for i in range(0, len(num_list) - 1):
+        a = num_list[i]
+        b = num_list[i+1]
+        if (b >= a):
+            string = greater(a, b, string)
+        elif (b < a):
+            string = lesser(a, b, string)
+    string = string + b*')'
+    return string
+        
     
 if __name__ == '__main__' :
     t = inputing()
     for i in range(t):
         string = input()
-        ans = pranthesis(string)
-        print('Case #{}: {}'.format(i+1, ans))
+        num_list = get_num_list(string)
+        answer = process(num_list)
+        print('Case #{}: {}'.format(i+1, answer))
